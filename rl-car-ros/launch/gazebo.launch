@@ -8,12 +8,12 @@
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
 
-  <arg name="x" default="-1"/>
+  <arg name="x" default="-3"/>
   <arg name="y" default="0"/>
   <arg name="z" default="0.2"/>
   
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find rl-car-ros)/worlds/mybot.world"/>
+    <arg name="world_name" value="$(find rl-car-ros)/worlds/simple_world.world"/>
     <arg name="paused" value="$(arg paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="gui" value="$(arg gui)"/>
