@@ -28,3 +28,9 @@ catkin_make
 roslaunch rl-car-ros simple.launch
 roslaunch rl-car-ros start_qlearning.launch
 ```
+
+![](world.png)
+
+![](graph.png)
+
+Qlearning Graph obtained at 20 episodes, 500 steps with alpha = 0.1, Gamma = 0.8 and epsilon = 0.9.
