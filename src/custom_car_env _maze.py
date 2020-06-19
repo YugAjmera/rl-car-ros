@@ -8,7 +8,7 @@ from gym import utils, spaces
 from gym_gazebo.envs import gazebo_env
 from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty
-from nav_msgs.msg import Odometry
+from nav_msgs import Odometry
 
 from sensor_msgs.msg import LaserScan
 
@@ -19,7 +19,7 @@ from gym.envs.registration import register
 reg = register(
 	id='CustomCar-v0',
 	entry_point='custom_car_env:CustomCarEnv',
-	max_episode_steps = 300,
+	max_episode_steps = 500,
 )
 
 class CustomCarEnv(gazebo_env.GazeboEnv):
@@ -36,28 +36,24 @@ class CustomCarEnv(gazebo_env.GazeboEnv):
         self.reward_range = (-np.inf, np.inf)
 
         self._seed()
-	self.flag = False
 
-    def discretize_observation(self,data,laserdata,new_ranges):
-	self.flag = False
+    def discretize_observation(self,data,new_ranges):
         discretized_ranges = []
         min_range = 0.7
         done = False
-        mod = len(laserdata.ranges)/new_ranges
-        for i, item in enumerate(laserdata.ranges):
-            if (min_range > laserdata.ranges[i] > 0):
+        mod = len(data.ranges)/new_ranges
+        for i, item in enumerate(data.ranges):
+            if (i%mod==0):
+                if data.ranges[i] == float ('Inf'):
+                    discretized_ranges.append(5)
+                elif np.isnan(data.ranges[i]):
+                    discretized_ranges.append(0)
+                else:
+                    discretized_ranges.append(int(data.ranges[i]))
+            if (min_range > data.ranges[i] > 0):
                 done = True
-		#print "Too close"
-
-	discretized_ranges.append(int(data.pose.pose.position.x*10))
-	discretized_ranges.append(int(data.pose.pose.position.y*10))
-	
-	if(-71 < discretized_ranges[0] < -53 and -6 < discretized_ranges[1] < 9):
-		done = True
-		self.flag = True
-		print "Goal reached !"
-
-	return discretized_ranges,done
+		print("Too close")
+        return discretized_ranges,done
 
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -78,28 +74,21 @@ class CustomCarEnv(gazebo_env.GazeboEnv):
             self.vel_pub.publish(vel_cmd)
         elif action == 1: #LEFT
             vel_cmd = Twist()
-            vel_cmd.linear.x = 0.08
-            vel_cmd.angular.z = 0.8
+            vel_cmd.linear.x = 0.05
+            vel_cmd.angular.z = 0.3
             self.vel_pub.publish(vel_cmd)
         elif action == 2: #RIGHT
             vel_cmd = Twist()
-            vel_cmd.linear.x = 0.08
-            vel_cmd.angular.z = -0.8
+            vel_cmd.linear.x = 0.05
+            vel_cmd.angular.z = -0.3
             self.vel_pub.publish(vel_cmd)
 
-	laserdata = None
-	data = None
-	
+        data = None
         while data is None:
             try:
-                data = rospy.wait_for_message('/odom', Odometry, timeout=5)
+                data = rospy.wait_for_message('/kinect/scan', LaserScan, timeout=5)
             except:
-                pass
-
-	while laserdata is None:
-            try:
-                laserdata = rospy.wait_for_message('/kinect/scan', LaserScan, timeout=5)
-            except:
+		print ("Time out scan")
                 pass
 
         rospy.wait_for_service('/gazebo/pause_physics')
@@ -109,20 +98,16 @@ class CustomCarEnv(gazebo_env.GazeboEnv):
         except (rospy.ServiceException) as e:
             print ("/gazebo/pause_physics service call failed")
 
-        state,done = self.discretize_observation(data,laserdata,5)
-	
+        state,done = self.discretize_observation(data,5)
+
         if not done:
             if action == 0:
                 reward = 5
             else:
                 reward = 1
         else:
-	    if self.flag:
-		reward = 5000
-	    else:
-            	reward = -200
+            reward = -200
 
-	reward += -1 #living reward
         return state, reward, done, {}
 
     def reset(self):
@@ -144,22 +129,19 @@ class CustomCarEnv(gazebo_env.GazeboEnv):
             print ("/gazebo/unpause_physics service call failed")
 
         #read laser data
-	laserdata = None
-	#read position
         data = None
-	
+	data_pose = None
         while data is None:
             try:
-                data = rospy.wait_for_message('/odom', Odometry, timeout=1)
+                data = rospy.wait_for_message('/kinect/scan', LaserScan, timeout=5)
+            except:
+                pass
+	while data_pose is None:
+            try:
+                data_pose = rospy.wait_for_message('/odom', Odometry, timeout=5)
             except:
                 pass
 
-	while laserdata is None:
-            try:
-                laserdata = rospy.wait_for_message('/kinect/scan', LaserScan, timeout=1)
-            except:
-                pass
-	
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
             #resp_pause = pause.call()
@@ -167,6 +149,6 @@ class CustomCarEnv(gazebo_env.GazeboEnv):
         except (rospy.ServiceException) as e:
             print ("/gazebo/pause_physics service call failed")
 
-        state = self.discretize_observation(data,laserdata,5)
+        state = self.discretize_observation(data,5)
 
         return state

@@ -3,7 +3,7 @@
 	
 	 <!-- Launch custom world Gazebo  -->
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
-		<arg name="world_name" default="$(find rl-car-ros)/worlds/maze_world.world"/>
+		<arg name="world_name" default="$(find rl-car-ros)/worlds/simple_world.world"/>
 		<arg name="paused" value="false"/>
 		<arg name="gui" value="true"/>
 	</include>
