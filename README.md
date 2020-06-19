@@ -1,5 +1,7 @@
 # Reinforcement Learning on a custom car using ROS
 
+Package which trains the robot to travel through a maze without hiting the wall autonomously using Reinforcement Learning.
+
 ## Install dependencies
 
 ```bash
