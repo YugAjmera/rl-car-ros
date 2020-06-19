@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+	
+	 <!-- Launch custom world Gazebo  -->
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+		<arg name="world_name" default="$(find rl-car-ros)/worlds/simple_world.world"/>
+		<arg name="paused" value="false"/>
+		<arg name="gui" value="true"/>
+	</include>
+
+	<!-- Launch the car -->
+	<include file="$(find rl-car-ros)/launch/urdf_gazebo_view.launch" />
+
+</launch>
