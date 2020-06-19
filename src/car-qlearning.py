@@ -8,7 +8,7 @@ import time
 import numpy
 import random
 import time
-#from liveplot import LivePlot
+import liveplot
 import qlearn
 
 def render():
@@ -31,7 +31,8 @@ if __name__ == '__main__':
     outdir = '/tmp/gazebo_gym_experiments'
     env = gym.wrappers.Monitor(env, outdir, force=True)
 
-    #plotter = liveplot.LivePlot(outdir)
+    plotter = liveplot.LivePlot(outdir)
+
     print "Monitor Wrapper Started"
     last_time_steps = numpy.ndarray(0)
 
@@ -56,18 +57,18 @@ if __name__ == '__main__':
         if qlearn.epsilon > 0.05:
             qlearn.epsilon *= epsilon_discount
 
-        #render() #defined above, not 
-	#print("Starting Render")
-	#env.render()
-	#print("end Render")
-
         state = ''.join(map(str, observation))
 
-        for i in range(200):
+        for i in range(100):
 
             # Pick an action based on the current state
             action = qlearn.chooseAction(state)
-            print("Action Chosen: "+str(action))
+            if(action == 0):
+		print("Action : Forward")
+	    elif(action == 1):
+		print("Action : Left")
+	    elif(action == 2):
+		print("Action : Right")
 
             # Execute the action and get feedback
             observation, reward, done, info = env.step(action)
@@ -90,6 +91,10 @@ if __name__ == '__main__':
                 last_time_steps = numpy.append(last_time_steps, [int(i + 1)])
                 break
 
+	if x%1==0:
+		plotter.plot(env)
+
+
         m, s = divmod(int(time.time() - start_time), 60)
         h, m = divmod(m, 60)
         print ("EP: "+str(x+1)+" - [alpha: "+str(round(qlearn.alpha,2))+" - gamma: "+str(round(qlearn.gamma,2))+" - epsilon: "+str(round(qlearn.epsilon,2))+"] - Reward: "+str(cumulated_reward)+"     Time: %d:%02d:%02d" % (h, m, s))
@@ -103,5 +108,5 @@ if __name__ == '__main__':
     #print("Parameters: a="+str)
     print("Overall score: {:0.2f}".format(last_time_steps.mean()))
     print("Best 100 score: {:0.2f}".format(reduce(lambda x, y: x + y, l[-100:]) / len(l[-100:])))
-
     env.close()
+    plotter.show()

@@ -20,6 +20,7 @@ cd catkin_ws/src
 git clone "https://github.com/YugAjmera/rl-car-ros.git"
 cd ..
 catkin_make
+```
 
 ## Launch
 

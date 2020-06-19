@@ -18,7 +18,7 @@ from gym.envs.registration import register
 reg = register(
 	id='CustomCar-v0',
 	entry_point='custom_car_env:CustomCarEnv',
-	max_episode_steps = 200,
+	max_episode_steps = 100,
 )
 
 class CustomCarEnv(gazebo_env.GazeboEnv):

@@ -35,4 +35,7 @@ class LivePlot(object):
 
         # pause so matplotlib will display
         # may want to figure out matplotlib animation or use a different library in the future
-        plt.pause(0.000001)
+        #plt.pause(0.000001)
+
+    def show(self):
+	plt.show()
