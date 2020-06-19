@@ -18,7 +18,7 @@ from gym.envs.registration import register
 reg = register(
 	id='CustomCar-v0',
 	entry_point='custom_car_env:CustomCarEnv',
-	max_episode_steps = 100,
+	max_episode_steps = 500,
 )
 
 class CustomCarEnv(gazebo_env.GazeboEnv):
@@ -44,13 +44,14 @@ class CustomCarEnv(gazebo_env.GazeboEnv):
         for i, item in enumerate(data.ranges):
             if (i%mod==0):
                 if data.ranges[i] == float ('Inf'):
-                    discretized_ranges.append(6)
+                    discretized_ranges.append(5)
                 elif np.isnan(data.ranges[i]):
                     discretized_ranges.append(0)
                 else:
                     discretized_ranges.append(int(data.ranges[i]))
             if (min_range > data.ranges[i] > 0):
                 done = True
+		print("Too close")
         return discretized_ranges,done
 
     def _seed(self, seed=None):

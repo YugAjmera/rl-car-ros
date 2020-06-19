@@ -44,7 +44,7 @@ if __name__ == '__main__':
     epsilon_discount = 0.999 # 1098 eps to reach 0.1
 
     start_time = time.time()
-    total_episodes = 10
+    total_episodes = 20
     highest_reward = 0
 
     for x in range(total_episodes):
@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
         state = ''.join(map(str, observation))
 
-        for i in range(100):
+        for i in range(500):
 
             # Pick an action based on the current state
             action = qlearn.chooseAction(state)

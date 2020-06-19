@@ -5,9 +5,9 @@
 	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find rl-car-ros)/urdf/car.urdf.xacro'" />
 
 		
-	<arg name="x" default="-3"/>
+	<arg name="x" default="0"/>
   	<arg name="y" default="0"/>
- 	<arg name="z" default="0.2"/>
+ 	<arg name="z" default="0.5"/>
 	
 	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -x $(arg x) -y $(arg y) -z $(arg z) -model car -param robot_description"/>
 	
