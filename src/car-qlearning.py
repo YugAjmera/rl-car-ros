@@ -37,45 +37,38 @@ if __name__ == '__main__':
     last_time_steps = numpy.ndarray(0)
 
     qlearn = qlearn.QLearn(actions=range(env.action_space.n),
-                    alpha=0.1, gamma=0.8, epsilon=0.7)
+                    alpha=0.1, gamma=0.9, epsilon=0.1)
 	
-    initial_epsilon = qlearn.epsilon
-
-    epsilon_discount = 0.999 # 1098 eps to reach 0.1
 
     start_time = time.time()
-    total_episodes = 10
-    highest_reward = 0
-
+    total_episodes = 50
+ 
     for x in range(total_episodes):
         done = False
 
-        cumulated_reward = 0 #Should going forward give more reward then L/R ?
-        print("Episode = " +str(x))
+        cumulated_reward = 0 
+        print("Episode = " +str(x)+ " started")
         observation = env.reset()
-
-	if qlearn.epsilon > 0.05:
-		qlearn.epsilon *= epsilon_discount
 
         state = ''.join(map(str, observation))
 
-        for i in range(300):
+	i = 0
+        #for i in range(300):
+	while(True):
 
             # Pick an action based on the current state
             action = qlearn.chooseAction(state)
-            if(action == 0):
-		print("Action : Forward")
-	    elif(action == 1):
-		print("Action : Left")
-	    elif(action == 2):
-		print("Action : Right")
+            #if(action == 0):
+		#print("Action : Forward")
+	    #elif(action == 1):
+		#print("Action : Left")
+	    #elif(action == 2):
+		#print("Action : Right")
 
             # Execute the action and get feedback
             observation, reward, done, info = env.step(action)
             cumulated_reward += reward
 
-            if highest_reward < cumulated_reward:
-                highest_reward = cumulated_reward
 
             nextState = ''.join(map(str, observation))
 
@@ -90,6 +83,8 @@ if __name__ == '__main__':
                 last_time_steps = numpy.append(last_time_steps, [int(i + 1)])
                 break
 
+	    i = i+1
+
 	if x%1==0:
 		plotter.plot(env)
 
@@ -99,7 +94,7 @@ if __name__ == '__main__':
         print ("EP: "+str(x+1)+" - [alpha: "+str(round(qlearn.alpha,2))+" - gamma: "+str(round(qlearn.gamma,2))+" - epsilon: "+str(round(qlearn.epsilon,2))+"] - Reward: "+str(cumulated_reward)+"     Time: %d:%02d:%02d" % (h, m, s))
 
     #Github table content
-    print ("\n|"+str(total_episodes)+"|"+str(qlearn.alpha)+"|"+str(qlearn.gamma)+"|"+str(qlearn.epsilon)+"|"+str(highest_reward)+"| PICTURE |")
+    print ("\n|"+str(total_episodes)+"|"+str(qlearn.alpha)+"|"+str(qlearn.gamma)+"|"+str(qlearn.epsilon)+"| PICTURE |")
 
     l = last_time_steps.tolist()
     l.sort()

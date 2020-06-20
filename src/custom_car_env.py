@@ -51,11 +51,11 @@ class CustomCarEnv(gazebo_env.GazeboEnv):
         for i, item in enumerate(laserdata.ranges):
             if (i%mod==0):
                 if laserdata.ranges[i] == float ('Inf'):
-                    discretized_ranges.append(5)
+                    discretized_ranges.append(50)
                 elif np.isnan(laserdata.ranges[i]):
                     discretized_ranges.append(0)
                 else:
-                    discretized_ranges.append(int(laserdata.ranges[i]))
+                    discretized_ranges.append(int(laserdata.ranges[i]*10))
             if (min_range > laserdata.ranges[i] > 0):
                 done = True
 	
@@ -63,7 +63,7 @@ class CustomCarEnv(gazebo_env.GazeboEnv):
 		done = True
 		self.flag = True
 		print "Goal reached !"
-	print(discretized_ranges)
+	
 	return discretized_ranges,done
 
     def _seed(self, seed=None):
@@ -120,9 +120,9 @@ class CustomCarEnv(gazebo_env.GazeboEnv):
 	
         if not done:
             if action == 0:
-                reward = 5
+                reward = 0
             else:
-                reward = 1
+                reward = 0
         else:
 	    if self.flag:
 		reward = 5000

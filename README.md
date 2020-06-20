@@ -31,8 +31,11 @@ roslaunch rl-car-ros simple.launch
 roslaunch rl-car-ros start_qlearning.launch
 ```
 
+## Environment Specifications
+
+- State : LaserScan + Odometry(x and y coordinates)
+- Actions : Forward, Right, Left
+- Episodic Task: An episode ends when the robot hits a wall (Reward = -200) or when the robot reaches the goal position (Reward = +5000). A living reward of -1 is given at each step which encourages the robot to end the episode as soon as possible.
+- Qlearning algorithm is implemented. The world is show below:
+
 ![](world.png)
-
-![](graph.png)
-
-Qlearning Graph obtained at 20 episodes, 500 steps with alpha = 0.1, Gamma = 0.8 and epsilon = 0.9.

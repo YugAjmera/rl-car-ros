@@ -12,10 +12,7 @@ class QLearn:
         return self.q.get((state, action), 0.0)
 
     def learnQ(self, state, action, reward, value):
-        '''
-        Q-learning:
-            Q(s, a) += alpha * (reward(s,a) + max(Q(s') - Q(s,a))            
-        '''
+        
         oldv = self.q.get((state, action), None)
         if oldv is None:
             self.q[(state, action)] = reward
@@ -26,11 +23,8 @@ class QLearn:
         q = [self.getQ(state, a) for a in self.actions]
         maxQ = max(q)
 
-        if random.random() < self.epsilon:
-            minQ = min(q); mag = max(abs(minQ), abs(maxQ))
-            # add random values to all the actions, recalculate maxQ
-            q = [q[i] + random.random() * mag - .5 * mag for i in range(len(self.actions))] 
-            maxQ = max(q)
+        if random.uniform(0, 1) < self.epsilon:  #explore
+            maxQ = random.choice(q)
 
         count = q.count(maxQ)
         # In case there're several state-action max values 
