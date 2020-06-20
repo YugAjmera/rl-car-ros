@@ -5,7 +5,7 @@
 	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find rl-car-ros)/urdf/car.urdf.xacro'" />
 
 		
-	<arg name="x" default="-2.5"/>
+	<arg name="x" default="0"/>
   	<arg name="y" default="0"/>
   	<arg name="z" default="0.2"/>
 	

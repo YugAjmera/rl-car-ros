@@ -45,26 +45,25 @@ class CustomCarEnv(gazebo_env.GazeboEnv):
 	discretized_ranges.append(int(data.pose.pose.position.x*10))
 	discretized_ranges.append(int(data.pose.pose.position.y*10))
 
-        min_range = 0.65
+        min_range = 0.75
         done = False
-        mod = len(data.ranges)/new_ranges
-        for i, item in enumerate(data.ranges):
+        mod = len(laserdata.ranges)/new_ranges
+        for i, item in enumerate(laserdata.ranges):
             if (i%mod==0):
-                if data.ranges[i] == float ('Inf'):
+                if laserdata.ranges[i] == float ('Inf'):
                     discretized_ranges.append(5)
-                elif np.isnan(data.ranges[i]):
+                elif np.isnan(laserdata.ranges[i]):
                     discretized_ranges.append(0)
                 else:
-                    discretized_ranges.append(int(data.ranges[i]))
-            if (min_range > data.ranges[i] > 0):
+                    discretized_ranges.append(int(laserdata.ranges[i]))
+            if (min_range > laserdata.ranges[i] > 0):
                 done = True
-		print("Too close")
 	
-	if(-71 < discretized_ranges[0] < -53 and -6 < discretized_ranges[1] < 9):
+	if(0 < discretized_ranges[0] < 18 and -58 < discretized_ranges[1] < -39):
 		done = True
 		self.flag = True
 		print "Goal reached !"
-
+	print(discretized_ranges)
 	return discretized_ranges,done
 
     def _seed(self, seed=None):
