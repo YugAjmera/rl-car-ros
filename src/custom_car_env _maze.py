@@ -17,8 +17,8 @@ from gym.utils import seeding
 from gym.envs.registration import register
 
 reg = register(
-	id='CustomCar-v0',
-	entry_point='custom_car_env:CustomCarEnv',
+	id='CustomCar-v1',
+	entry_point='custom_car_env_maze:CustomCarEnv',
 	max_episode_steps = 500,
 )
 
