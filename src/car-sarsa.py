@@ -28,7 +28,7 @@ if __name__ == '__main__':
     last_time_steps = numpy.ndarray(0)
 
     sarsa = sarsa.Sarsa(actions=range(env.action_space.n),
-                    epsilon=0.1, alpha=0.1, gamma=0.9)
+                    epsilon=0.1, alpha=0.2, gamma=0.9)
 
     
 

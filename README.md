@@ -54,3 +54,9 @@ roslaunch rl-car-ros start_expected_sarsa.launch
 - The world is show below:
 
 ![](world.png)
+
+- Below are the results obtained for 50 episodes: (if someone could run this for 1000 episodes, I would be happy to accept a pull request !)
+
+![Qlearning](qlearning.png)
+![Sarsa](sarsa.png)
+![Expected-Sarsa](exp-sarsa.png)
