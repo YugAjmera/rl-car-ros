@@ -30,15 +30,21 @@ catkin_make
 ```bash
 roslaunch rl-car-ros simple.launch
 ```
-- Start  Q-Learning agent with 𝜖 -greedy action selection :
+- Start  Q-Learning agent with 𝜖 -greedy action selection : 
 ```
 roslaunch rl-car-ros start_qlearning.launch
 ```
--------------------OR---------------------------
-- Start Sarsa-Learning agent with 𝜖 -greedy action selection :
+or
+- Start Sarsa-Learning agent with 𝜖 -greedy action selection : 
 ```
 roslaunch rl-car-ros start_sarsa.launch 
 ```
+or
+- Start Expected Sarsa-Learning agent with 𝜖 -greedy action selection :
+```
+roslaunch rl-car-ros start_expected_sarsa.launch 
+```
+
 
 ## Environment Specifications
 

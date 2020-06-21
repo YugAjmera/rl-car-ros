@@ -1,6 +1,6 @@
 import random
 
-class Sarsa:
+class ExpectedSarsa:
     def __init__(self, actions, epsilon, alpha, gamma):
         self.q = {}
 
@@ -35,6 +35,18 @@ class Sarsa:
             action = self.actions[i]
         return action
 
-    def learn(self, state1, action1, reward, state2, action2):
-        qnext = self.getQ(state2, action2)
-        self.learnQ(state1, action1, reward, reward + self.gamma * qnext)
+    def learn(self, state1, action1, reward, state2):
+        exp_q = 0
+	q = [self.getQ(state2, a) for a in self.actions]
+        best = [i for i in range(len(self.actions)) if q[i] == max(q)] 			#calculate number of greedy actions
+	
+	non_greedy_actions_prob = (self.epsilon / len(self.actions))
+        greedy_actions_prob = ((1 - self.epsilon) / len(best)) + (self.epsilon / len(self.actions))	
+
+	for a in self.actions:
+            if self.getQ(state2, a) == max(q): 						# This is a greedy action
+                exp_q += self.getQ(state2, a) * greedy_actions_prob
+            else: 									# This is a non-greedy action
+                exp_q += self.getQ(state2, a) * non_greedy_actions_prob
+	
+        self.learnQ(state1, action1, reward, reward + self.gamma * exp_q)
