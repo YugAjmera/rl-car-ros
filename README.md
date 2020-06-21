@@ -1,6 +1,7 @@
 # Reinforcement Learning on a custom car using ROS
 
-Package which trains the robot to travel through a maze without hiting the wall autonomously using Reinforcement Learning.
+Package which trains a robot to reach a goal position without colliding using RL.
+
 
 ## Install dependencies
 
@@ -28,7 +29,15 @@ catkin_make
 
 ```bash
 roslaunch rl-car-ros simple.launch
+```
+- Start  Q-Learning agent with 𝜖 -greedy action selection :
+```
 roslaunch rl-car-ros start_qlearning.launch
+```
+-------------------OR---------------------------
+- Start Sarsa-Learning agent with 𝜖 -greedy action selection :
+```
+roslaunch rl-car-ros start_sarsa.launch 
 ```
 
 ## Environment Specifications
