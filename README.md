@@ -1,6 +1,6 @@
 # Reinforcement Learning on a custom car using ROS
 
-Package which trains a robot to reach a goal position without colliding using RL.
+Package which trains a robot to reach a goal position without colliding using RL. Experiments are carried out on a car simulation in Gazebo.
 
 
 ## Install dependencies
@@ -51,6 +51,6 @@ roslaunch rl-car-ros start_expected_sarsa.launch
 - State : LaserScan + Odometry(x and y coordinates)
 - Actions : Forward, Right, Left
 - Episodic Task: An episode ends when the robot hits a wall (Reward = -200) or when the robot reaches the goal position (Reward = +5000). A living reward of -1 is given at each step which encourages the robot to end the episode as soon as possible.
-- Qlearning algorithm is implemented. The world is show below:
+- The world is show below:
 
 ![](world.png)
